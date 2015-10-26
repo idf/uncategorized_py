@@ -1,2 +1,2 @@
-# random_py
-random thoughts in python
+# uncategorized_py
+Uncategorized thoughts in python
