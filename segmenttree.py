@@ -1,22 +1,20 @@
 """
 Segment Tree
 """
-from operator import itemgetter
-
 __author__ = 'Daniel'
 
 
 class Node(object):
-    def __init__(self, start, end, cnt):
-        self.start = start
-        self.end = end
+    def __init__(self, lo, hi, cnt):
+        self.lo = lo
+        self.hi = hi
         self.cnt = cnt
 
         self.left = None
         self.right = None
 
     def __repr__(self):
-        return repr("[%d,%d)" % (self.start, self.end))
+        return repr("[%d,%d)" % (self.lo, self.hi))
 
 
 class SegmentTree(object):
@@ -24,14 +22,14 @@ class SegmentTree(object):
     def __init__(self):
         self.root = None
 
-    def build(self, start, end):
-        """a node can have right ONLY if has left"""
-        if start >= end:
-            return
+    def build(self, lo, hi):
+        """a node can have right ONLY IF has left"""
+        if lo >= hi: return
+        if lo == hi-1: return Node(lo, hi, 1)
 
-        root = Node(start, end, end-start)
-        root.left = self.build(start, (end+start)/2)
-        if root.left: root.right = self.build((start+end)/2, end)
+        root = Node(lo, hi, hi-lo)
+        root.left = self.build(lo, (hi+lo)/2)
+        root.right = self.build((lo+hi)/2, hi)
         return root
 
     def find_delete(self, root, val):
@@ -40,15 +38,16 @@ class SegmentTree(object):
         """
         root.cnt -= 1
         if not root.left:
-            return root.start
+            return root.lo
         elif root.left.cnt >= val:
             return self.find_delete(root.left, val)
         else:
-            return self.find_delete(root.right, val-root.left.cnt)
+            return self.find_delete(root.right,
+                                    val - root.left.cnt)
 
 
 class Solution(object):
-    def reconstructFromInversion(self, A):
+    def reconstruct(self, A):
         st = SegmentTree()
         n = len(A)
         st.root = st.build(0, n)
@@ -60,6 +59,7 @@ class Solution(object):
 
         return ret
 
+
 if __name__ == "__main__":
     A = [(5, 0), (2, 1), (3, 1), (4, 1,), (1, 4)]
-    assert Solution().reconstructFromInversion(A) == [5, 2, 3, 4, 1]
+    assert Solution().reconstruct(A) == [5, 2, 3, 4, 1]
