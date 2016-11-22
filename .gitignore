@@ -272,3 +272,4 @@ bower_components/
 *.bb
 *.dvi
 *.dvv
+hw*.pdf
