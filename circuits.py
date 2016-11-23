@@ -15,6 +15,7 @@ def full_sub(a, b, bin):
 
 
 if __name__ == "__main__":
+    print "a b c out borrow"
     for a in (0, 1):
         for b in (0, 1):
             for bin in (0, 1):
